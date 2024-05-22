@@ -2,7 +2,7 @@
 
 A simple carousel for React native app
 
-![](https://github.com/nguyentc21/react-native-simple-carousel/assets/react-native-simple-carousel.gif)
+![](https://raw.githubusercontent.com/nguyentc21/react-native-simple-carousel/main/assets/react-native-simple-carousel.gif)
 
 ## Installation
 
