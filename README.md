@@ -5,17 +5,36 @@ A simple carousel for React native app
 ## Installation
 
 ```sh
-npm install react-native-simple-carousel
+yarn add @nguyentc21/react-native-simple-carousel
 ```
 
 ## Usage
 
-```js
-import { SimpleCarouselView } from "react-native-simple-carousel";
+```tsx
+import Carousel from '@nguyentc21/react-native-simple-carousel';
 
+const DATA = [
+  { uri: 'https://...... ... ... image1.png' },
+  { uri: 'https://...... ... ... image2.png' },
+];
 // ...
-
-<SimpleCarouselView color="tomato" />
+export function NiceView(props: Props) {
+  // ...
+  return (
+    <>
+      {/* ... */}
+      <Carousel
+        data={DATA}
+        width={300}
+        height={150}
+        autoPlay
+        loop
+        duration={5000}
+      />
+      {/* ... */}
+    </>
+  );
+}
 ```
 
 ## Contributing
