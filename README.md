@@ -2,6 +2,8 @@
 
 A simple carousel for React native app
 
+![](https://github.com/nguyentc21/react-native-simple-carousel/assets/react-native-simple-carousel.gif)
+
 ## Installation
 
 ```sh
@@ -19,18 +21,42 @@ const DATA = [
 ];
 // ...
 export function NiceView(props: Props) {
+  const carouselRef = useRef();
   // ...
   return (
     <>
       {/* ... */}
       <Carousel
+        ref={carouselRef}
         data={DATA}
         width={300}
         height={150}
         autoPlay
+        // playInvert
         loop
+        // initialIndex={0}
+        // hideIndicator
+        // indicatorSize={10}
         duration={5000}
+        // onChangeIndex={(index) => {
+        //   // do something
+        // }}
       />
+      {/* ... */}
+      <Button
+        onPress={() => {
+          carouselRef.current?.toPrev();
+        }}
+      >
+        Prev
+      </Button>
+      <Button
+        onPress={() => {
+          carouselRef.current?.toNext();
+        }}
+      >
+        Next
+      </Button>
       {/* ... */}
     </>
   );
