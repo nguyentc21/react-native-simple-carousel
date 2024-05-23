@@ -82,7 +82,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
     autoPlay,
     playInvert,
     loop = true,
-    duration = 3000,
+    duration = 5000,
     sliderStyle,
     imageStyle,
     hideIndicator,
@@ -296,7 +296,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
           {
             width,
             height,
-            padding: width * 0.02,
+            paddingHorizontal: width * 0.01,
             overflow: 'hidden',
           },
           sliderStyle,
@@ -306,7 +306,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
           source={item}
           onLoadEnd={_onImageLoadEnd(index)}
           style={[
-            { flex: 1, width: '100%', borderRadius: width * 0.05 },
+            { flex: 1, width: '100%', borderRadius: width * 0.04 },
             imageStyle,
           ]}
           resizeMode="cover"
@@ -332,7 +332,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
             borderRadius: indicatorSize,
             opacity: 0.3,
           },
-          isActivated && { opacity: 1 },
+          isActivated && { opacity: 0.7 },
           indicatorStyle,
         ]}
       />
