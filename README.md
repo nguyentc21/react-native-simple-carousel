@@ -1,6 +1,6 @@
 # react-native-simple-carousel
 
-A simple carousel for React native app
+A simple carousel for React native app (iOS & Android)
 
 ![](https://raw.githubusercontent.com/nguyentc21/react-native-simple-carousel/main/assets/react-native-simple-carousel.gif)
 

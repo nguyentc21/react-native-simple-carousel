@@ -226,6 +226,10 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
       return nextIndex;
     });
   };
+  useImperativeHandle(ref, () => ({
+    toNext: _toNextSlide,
+    toPrev: _toPrevSlide,
+  }));
 
   const _onBeginScrolling = () => {
     localData.current.isMomentumOrDragScrolling = true;
@@ -282,11 +286,12 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
   };
   const _onScrollDebounce = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     e.persist();
-    if (localData.current.isMomentumOrDragScrolling) return
-    _onEndScrollingDebounce(e, false)
-  }
+    if (localData.current.isMomentumOrDragScrolling) return;
+    _onEndScrollingDebounce(e, false);
+  };
 
   const _onImageLoadEnd = (index: number) => () => {
+    if (isReadyState) return;
     if (index === getInitialIndex(props)) {
       setIsReadyState(true);
     }
@@ -300,11 +305,6 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
     offset: width * index,
     index,
   });
-
-  useImperativeHandle(ref, () => ({
-    toNext: _toNextSlide,
-    toPrev: _toPrevSlide,
-  }));
 
   const _renderItem: ListRenderItem<ItemData> = ({ item, index }) => {
     return (
