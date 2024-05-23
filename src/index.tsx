@@ -97,9 +97,11 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
   const localData = useRef<{
     endScrollingTimeoutAction?: NodeJS.Timeout;
     timeoutLoopAction?: NodeJS.Timeout;
+    isMomentumOrDragScrolling: boolean;
   }>({
     endScrollingTimeoutAction: undefined,
     timeoutLoopAction: undefined,
+    isMomentumOrDragScrolling: false,
   });
 
   const [slideIndexState, setSlideIndexState] = useState(
@@ -226,17 +228,22 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
   };
 
   const _onBeginScrolling = () => {
+    localData.current.isMomentumOrDragScrolling = true;
     setIsScrollingState(true);
     _clearEndScrollingTimeoutAction();
   };
 
   const _onEndScrollingDebounce = (
-    e: NativeSyntheticEvent<NativeScrollEvent>
+    e: NativeSyntheticEvent<NativeScrollEvent>,
+    isNeedSetCurrentIndex: boolean,
+    cb?: () => void
   ) => {
     _clearEndScrollingTimeoutAction();
     const { contentOffset } = e.nativeEvent;
     const targetIndex = Math.round(contentOffset.x / width);
-    setCurrentIndexState(targetIndex);
+    if (isNeedSetCurrentIndex) {
+      setCurrentIndexState(targetIndex);
+    }
     localData.current.endScrollingTimeoutAction = setTimeout(() => {
       flatListRef.current?.scrollToIndex({
         index: targetIndex,
@@ -244,6 +251,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
         viewOffset: 0,
         viewPosition: 0,
       });
+      cb?.();
       setSlideIndexState(targetIndex);
       setIsScrollingState(false);
       localData.current.endScrollingTimeoutAction = undefined;
@@ -262,12 +270,21 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
   };
   const _onMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     e.persist();
-    _onEndScrollingDebounce(e);
+    _onEndScrollingDebounce(e, true, () => {
+      localData.current.isMomentumOrDragScrolling = false;
+    });
   };
   const _onScrollEndDrag = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     e.persist();
-    _onEndScrollingDebounce(e);
+    _onEndScrollingDebounce(e, true, () => {
+      localData.current.isMomentumOrDragScrolling = false;
+    });
   };
+  const _onScrollDebounce = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    e.persist();
+    if (localData.current.isMomentumOrDragScrolling) return
+    _onEndScrollingDebounce(e, false)
+  }
 
   const _onImageLoadEnd = (index: number) => () => {
     if (index === getInitialIndex(props)) {
@@ -388,6 +405,7 @@ const Carousel = forwardRef<CarouselRefType, CarouselProps>((props, ref) => {
         onMomentumScrollEnd={_onMomentumScrollEnd}
         onScrollBeginDrag={_onScrollBeginDrag}
         onScrollEndDrag={_onScrollEndDrag}
+        onScroll={_onScrollDebounce}
         getItemLayout={_getItemLayout}
         renderItem={_renderItem}
         keyExtractor={(_item, index) => index.toString()}
