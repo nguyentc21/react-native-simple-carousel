@@ -35,7 +35,7 @@ export function NiceView(props: Props) {
         // playInvert
         loop
         // initialIndex={0}
-        // hideIndicator
+        // hideIndicator={DATA.length < 2}
         // indicatorSize={10}
         duration={5000}
         // onChangeIndex={(index) => {
